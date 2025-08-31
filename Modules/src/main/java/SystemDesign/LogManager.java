@@ -15,9 +15,10 @@ public class LogManager {
     protected static LogSubject buildLogSubject(){
         LogSubject logSubject = new LogSubject();
         LogObserver consoleObserver = new ConsoleObserver();
-        LogObserver fileObserver = new ConsoleObserver();
+        LogObserver fileObserver = new FileObserver();
 
         logSubject.addObserver(1, consoleObserver);
+        logSubject.addObserver(2, consoleObserver);
         logSubject.addObserver(2, fileObserver);
         return logSubject;
     }

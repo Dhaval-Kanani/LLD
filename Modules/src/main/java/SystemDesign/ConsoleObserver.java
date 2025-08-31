@@ -1,8 +1,8 @@
 package SystemDesign;
 
-public class ConsoleObserver extends LogObserver{
+public class ConsoleObserver implements LogObserver{
     @Override
-    public void display(String msg) {
-        System.out.println("CONSOLE: " + msg);
+    public void log(String msg) {
+        System.out.println("Printing logs in Console: " + msg);
     }
 }

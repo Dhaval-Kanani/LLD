@@ -1,5 +1,5 @@
 package SystemDesign;
 
-public abstract class LogObserver {
-    public abstract void display(String msg);
+interface LogObserver {
+    public abstract void log(String msg);
 }

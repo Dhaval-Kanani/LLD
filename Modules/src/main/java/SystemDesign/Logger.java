@@ -28,7 +28,7 @@ public class Logger {
     }
 
     private void createMsg(int level, String msg){
-        chainOfLogger.logMessage(level, msg);
+        chainOfLogger.logMessage(level, msg, logSubject);
     }
 
     public void info(String msg){

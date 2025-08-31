@@ -18,7 +18,9 @@ public class LogSubject {
         observers.put(level, logObservers);
     }
 
-    public void notifyObservers(){
-        for(Map.entry(Map<Integer, List<LogObserver>>) entry: observers)
+    public void notifyObservers(int level, String msg){
+        List<LogObserver> observersList = observers.getOrDefault(level, new ArrayList<>());
+
+        observersList.forEach(observer -> observer.log(msg));
     }
 }

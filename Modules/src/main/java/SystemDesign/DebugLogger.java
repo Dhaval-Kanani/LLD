@@ -6,7 +6,8 @@ public class DebugLogger extends AbstarctLogger{
     }
 
     @Override
-    protected void display(String msg) {
-        System.out.println("Debug: "+  msg);
+    protected void display(String msg, LogSubject logSubject) {
+        logSubject.notifyObservers(3, "DEBUG: " + msg);
+//        System.out.println("Debug: "+  msg);
     }
 }

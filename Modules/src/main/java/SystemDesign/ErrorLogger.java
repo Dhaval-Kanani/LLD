@@ -6,7 +6,8 @@ public class ErrorLogger extends AbstarctLogger{
     }
 
     @Override
-    protected void display(String msg) {
-        System.out.println("Error: "+  msg);
+    protected void display(String msg, LogSubject logSubject) {
+        logSubject.notifyObservers(2, "ERROR: " + msg);
+//        System.out.println("Error: "+  msg);
     }
 }

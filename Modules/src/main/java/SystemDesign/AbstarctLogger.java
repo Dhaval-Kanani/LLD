@@ -9,14 +9,14 @@ public abstract class AbstarctLogger {
         this.nextLogger = nextLogger;
     }
 
-    void logMessage(int level, String msg){
+    void logMessage(int level, String msg, LogSubject logSubject){
         if(level==this.level){
-            display(msg);
+            display(msg, logSubject);
         }
         if(nextLogger!=null){
-            nextLogger.logMessage(level, msg);
+            nextLogger.logMessage(level, msg, logSubject);
         }
     }
 
-    protected abstract void display(String msg);
+    protected abstract void display(String msg, LogSubject logSubject);
 }

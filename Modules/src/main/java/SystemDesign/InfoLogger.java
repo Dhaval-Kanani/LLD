@@ -6,7 +6,8 @@ public class InfoLogger extends AbstarctLogger{
     }
 
     @Override
-    protected void display(String msg) {
-        System.out.println("Info: "+  msg);
+    protected void display(String msg, LogSubject logSubject) {
+        logSubject.notifyObservers(1, "INFO: " + msg);
+//        System.out.println("Info: "+  msg);
     }
 }
