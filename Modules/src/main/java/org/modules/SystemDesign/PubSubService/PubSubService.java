@@ -13,14 +13,12 @@ import java.util.concurrent.Executors;
 public class PubSubService {
     private static PubSubService pubSubService;
     private Map<String, Topic> topicRegistery;
-    private ExecutorService executorService;
 
     private PubSubService() {
         if(pubSubService!=null)
             throw new IllegalStateException("Object already created!");
         else{
             this.topicRegistery = new ConcurrentHashMap<>();
-            this.executorService = Executors.newCachedThreadPool();
         }
     }
 
@@ -36,7 +34,7 @@ public class PubSubService {
     }
 
     public void createTopic(String topicId){
-        Topic topic = new Topic(topicId, executorService);
+        Topic topic = new Topic(topicId);
         topicRegistery.putIfAbsent(topicId, topic);
     }
 
