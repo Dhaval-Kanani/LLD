@@ -54,7 +54,7 @@ public class Main {
             }
         }
 
-        System.out.println("\n📊 STRESS TEST RESULTS:");
+        System.out.println("\n STRESS TEST RESULTS:");
 //        System.out.println("Time taken: " + (endTime - startTime) + "ms");
         System.out.println("Successful parkings: " + successfulTickets.size());
         System.out.println("Failed attempts: " + failedAttempts.size());
@@ -63,7 +63,7 @@ public class Main {
             System.out.println("  " + ticket.getVehicleId());
         }
 
-        System.out.println("\n❌ Failed attempts:");
+        System.out.println("\n Failed attempts:");
         for (String failure : failedAttempts) {
             System.out.println("  " + failure);
         }
