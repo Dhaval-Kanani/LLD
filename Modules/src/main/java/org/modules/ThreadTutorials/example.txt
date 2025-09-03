@@ -1,0 +1,49 @@
+Example
+
+We have 3 services asynchronously using RestTemplate and aggregates all the responses before sending
+the response to the caller. Here’s how you can do it: Refer flow.png
+
+1. Create a service that uses RestTemplate to call the three endpoints asynchronously.
+You can use Spring’s AsyncRestTemplate to achieve this. Here's an example of how you can create a
+service that calls three endpoints and aggregates their responses:
+
+
+public class AggregatedResponse{
+    private User[] users;
+    private Product[] products;
+    private Order[] orders;
+}
+
+@RestController
+public class AggregatorController{
+    @Autowired
+    private AggregatorService aggregatorService;
+
+    @GetMapping("/aggregate")
+    public CompletableFuture<AggregatedResponse> getAggregatedResponse(){
+        return aggregatorService.getAggregatedResponse();
+    }
+}
+
+@Service
+public class AggregatorService {
+    @Autowired
+    private AsyncRestTemplate restTemplate;
+
+    public CompletableFuture<AggregatedResponse> getAggregatedResponse(){
+        CompletableFuture<User []> userFuture = CompletableFuture.supplyAsync(()->{
+            return restTemplate.getForObject("http://localhost:8080/users", User[].class);
+        };
+
+        CompletableFuture<Product[]> productFuture = CompletableFuture.supplyAsync(() ->{
+            return restTemplate.getForObject("http://localhost/8080/products", Product[].class);
+        };
+
+        CompletableFuture<Order[]> orderFuture = CompletableFuture.supplyAsync(() ->{
+            return restTemplate.getForObject("http://localhost/8080/products", Order[].class);
+        };
+
+        return CompletableFuture.allOf(userFuture, productFuture, orderFuture)
+                    .thenApply(s -> new AggregatedResponse(userFuture.join(), productFuture.join(), orderFuture.join()));
+    }
+}

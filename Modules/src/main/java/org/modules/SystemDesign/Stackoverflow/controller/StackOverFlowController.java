@@ -1,7 +1,7 @@
 package org.modules.SystemDesign.Stackoverflow.controller;
 
 
-import SystemDesign.Stackoverflow.entity.*;
+import org.modules.SystemDesign.Stackoverflow.entity.*;
 import org.modules.SystemDesign.Stackoverflow.entity.*;
 import org.modules.SystemDesign.Stackoverflow.enums.PostType;
 import org.modules.SystemDesign.Stackoverflow.enums.VoteType;

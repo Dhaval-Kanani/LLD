@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="urlshortner" />
-        <module name="trafficsignalsystem" />
-        <module name="parkinglotsystem" />
         <module name="Modules" />
-        <module name="stackoverflow" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="parkinglotsystem" target="17" />
+      <module name="stackoverflow" target="17" />
+      <module name="trafficsignalsystem" target="17" />
+      <module name="urlshortner" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
