@@ -4,16 +4,19 @@ import org.modules.SystemDesign.PubSubService.subscriber.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.*;
 
 public class Topic {
     private String topicId;
     private Set<Subscriber> subscribers;
+    private CopyOnWriteArrayList<Message> messages;
 
     public Topic(String topicId) {
         this.topicId = topicId;
         this.subscribers = new CopyOnWriteArraySet<>();
+        this.messages = new CopyOnWriteArrayList<>();
     }
 
     public void addSubscriber(Subscriber subscriber){
@@ -27,6 +30,7 @@ public class Topic {
     }
 
     public void publishMessage(Message message){
+        messages.add(message);
 
         for(Subscriber subscriber: subscribers){
 
@@ -64,5 +68,31 @@ public class Topic {
 //        CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 //        allFutures.thenRun(() ->System.out.println("Published the message successfully to subscribers"));
 //        allFutures.join();
+    }
+
+    public void offSetSubscriber(Subscriber subscriber, int offset){
+        Optional<Subscriber> sub = subscribers.stream()
+                .filter(s-> s.getId().equals(subscriber.getId()))
+                .findFirst();
+
+        if(sub.isEmpty()){
+            System.out.println("Subscriber not found with id: " + subscriber.getId());
+            return;
+        }
+
+        for(int i=offset; i<messages.size(); i++){
+            int finalI = i;
+            CompletableFuture.runAsync(()->{
+                subscriber.consumeMessage(messages.get(finalI));
+            }).exceptionally(r -> {
+                System.out.println("Error while publishing message to subscriber: " + subscriber.getId());
+                return null;
+            }).thenAccept(r -> {
+                System.out.println("Consumed!!");
+            });
+        }
+
+        System.out.println("Changed the offset of the subscriber of id: " + subscriber.getId() + " and published the messages");
+
     }
 }

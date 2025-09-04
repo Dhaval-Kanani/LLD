@@ -6,9 +6,6 @@ import org.modules.SystemDesign.PubSubService.subscriber.Subscriber;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class PubSubService {
     private static PubSubService pubSubService;
@@ -63,6 +60,15 @@ public class PubSubService {
             return;
         }
         topic.publishMessage(message);
+    }
+
+    public void setOffSetForSubscriber(Subscriber subscriber, int offset, String topicId){
+        Topic topic = topicRegistery.get(topicId);
+        if(topic == null){
+            System.out.println("Topic not found: " + topicId);
+            return;
+        }
+        topic.offSetSubscriber(subscriber, offset);
     }
 
 }
