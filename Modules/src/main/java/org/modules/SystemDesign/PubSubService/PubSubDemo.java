@@ -38,7 +38,7 @@ public class PubSubDemo {
         pubSubService.publishMessage(m4, "SPORTS");
 
 
-        pubSubService.setOffSetForSubscriber(sportFan1, 0, "SPORTS");
+        pubSubService.setOffSetForSubscriber(sportFan1, 1, "SPORTS");
 
         Thread.sleep(1000);
 
