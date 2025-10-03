@@ -1,6 +1,6 @@
 package org.modules.SystemDesign.LoggingFrameWork;
 
-public class InfoLogger extends AbstarctLogger{
+public class InfoLogger extends AbstractLogger {
     public InfoLogger(int level){
         this.level = level;
     }

@@ -5,7 +5,7 @@ import static org.modules.SystemDesign.LoggingFrameWork.LogManager.buildLogSubje
 
 public class Logger {
     private volatile static Logger logger;
-    private volatile static AbstarctLogger chainOfLogger;
+    private volatile static AbstractLogger chainOfLogger;
     private volatile static LogSubject logSubject;
 
     private Logger(){

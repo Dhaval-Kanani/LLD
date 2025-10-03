@@ -1,11 +1,11 @@
 package org.modules.SystemDesign.LoggingFrameWork;
 
-public abstract class AbstarctLogger {
+public abstract class AbstractLogger {
     int level;
 
-    AbstarctLogger nextLogger;
+    AbstractLogger nextLogger;
 
-    public void setNextLogger(AbstarctLogger nextLogger) {
+    public void setNextLogger(AbstractLogger nextLogger) {
         this.nextLogger = nextLogger;
     }
 

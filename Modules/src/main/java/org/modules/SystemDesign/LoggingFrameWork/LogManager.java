@@ -1,10 +1,10 @@
 package org.modules.SystemDesign.LoggingFrameWork;
 
 public class LogManager {
-    protected static AbstarctLogger buildChainOfLogger(){
-        AbstarctLogger infoLogger = new InfoLogger(1);
-        AbstarctLogger errorLogger = new ErrorLogger(2);
-        AbstarctLogger debugLogger = new DebugLogger(3);
+    protected static AbstractLogger buildChainOfLogger(){
+        AbstractLogger infoLogger = new InfoLogger(1);
+        AbstractLogger errorLogger = new ErrorLogger(2);
+        AbstractLogger debugLogger = new DebugLogger(3);
 
         infoLogger.setNextLogger(errorLogger);
         errorLogger.setNextLogger(debugLogger);

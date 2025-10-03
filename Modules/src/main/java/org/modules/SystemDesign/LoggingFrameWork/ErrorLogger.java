@@ -1,6 +1,6 @@
 package org.modules.SystemDesign.LoggingFrameWork;
 
-public class ErrorLogger extends AbstarctLogger{
+public class ErrorLogger extends AbstractLogger {
     public ErrorLogger(int level){
         this.level = level;
     }
