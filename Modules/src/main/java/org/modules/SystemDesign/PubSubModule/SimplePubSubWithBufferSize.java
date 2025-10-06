@@ -10,7 +10,7 @@ producing until the queue is full (then wait), and the consumer will keep consum
 They do not truly run in parallel on the queue.
 This is a limitation of using a single lock for both operations. However, this approach is necessary to maintain
 thread safety for the shared queue. If you want more concurrency, you can use finer-grained locking or use concurrent
-data structures like BlockingQueue (as in your other implementation), which handle this internally and allow more
+data structures like BlockingQueue (as in other implementation), which handle this internally and allow more
 parallelism.
 For most simple producer-consumer problems, this level of synchronization is acceptable and safe, but it does limit
 parallelism. For higher throughput, prefer BlockingQueue or similar concurrent collections.
