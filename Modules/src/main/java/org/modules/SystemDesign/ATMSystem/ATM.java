@@ -59,4 +59,9 @@ public class ATM {
     public void setNoOfHundredNotes(int noOfHundredNotes) {
         this.noOfHundredNotes = noOfHundredNotes;
     }
+
+    public void status(){
+        System.out.println("Total Bal - " + totalBalance + " Two thousand notes - " + noOfTwoThousandNotes
+         + " Five hundred notes - " + noOfFiveHundredNotes + " One Hundred notes - " + noOfHundredNotes);
+    }
 }

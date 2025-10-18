@@ -2,6 +2,8 @@ package org.modules.SystemDesign.ATMSystem.ATMStates;
 
 import org.modules.SystemDesign.ATMSystem.ATM;
 import org.modules.SystemDesign.ATMSystem.Card;
+import org.modules.SystemDesign.ATMSystem.WithdrawalSys.WithdrawalManager;
+import org.modules.SystemDesign.ATMSystem.WithdrawalSys.WithdrawalProcessor;
 
 public class WithdrawalState extends ATMState{
     public WithdrawalState(){
@@ -11,6 +13,7 @@ public class WithdrawalState extends ATMState{
     @Override
     public void withdrawBalance(ATM atm, Card card, int withdrawAmt){
         System.out.println("Withdraw Request Amount - " + withdrawAmt);
+
         int atmBal = atm.getTotalBalance();
         int accountBal = card.getBankAccount().getAmount();
 
@@ -20,9 +23,13 @@ public class WithdrawalState extends ATMState{
             System.out.println("Enough amount is not present in your account to withdraw");
             System.out.println("Account Bal - " + accountBal);
         } else{
+
+            WithdrawalProcessor withdrawalProcessor = WithdrawalManager.getWithdrawalProcessor();
+            withdrawalProcessor.withdraw(atm, withdrawAmt);
+
             card.getBankAccount().setAmount(accountBal - withdrawAmt);
-            atm.setTotalBalance(atmBal - withdrawAmt);
             System.out.println("Amount withdrawn");
+            atm.status();
         }
 
         exitATM(atm);

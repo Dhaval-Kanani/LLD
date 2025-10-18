@@ -13,6 +13,8 @@ public class ATMRoom {
 
         Card card = atmRoom.user.getCard();
 
+        atmRoom.atm.status();
+
         atmRoom.atm.getAtmState().insertCard(atmRoom.atm, card);
         atmRoom.atm.getAtmState().authenticatePin(atmRoom.atm, card, "112233");
 
