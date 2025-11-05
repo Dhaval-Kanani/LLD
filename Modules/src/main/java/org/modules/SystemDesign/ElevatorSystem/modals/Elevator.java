@@ -12,7 +12,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Elevator {
     private ElevatorNumber elevatorNumber;
@@ -22,7 +25,7 @@ public class Elevator {
     private Boolean isMoving;
     private Direction currentDirection;
 
-    private Queue<Request> requests;
+    private BlockingQueue<Request> requests;
 
     public Elevator(ElevatorNumber elevatorNumber, FloorNumber currentFloor) {
         this.elevatorNumber = elevatorNumber;
@@ -35,7 +38,7 @@ public class Elevator {
         this.floorButtons = new HashMap<>();
         this.doorButtons = new HashMap<>();
         this.isMoving = false;
-        this.requests = new LinkedList<>();
+        this.requests = new LinkedBlockingQueue<>();
 
         for(int i=0; i<FloorNumber.values().length; i++){
             FloorNumber floorNumber = FloorNumber.values()[i];
@@ -44,6 +47,7 @@ public class Elevator {
 
         doorButtons.put(ButtonType.DOOR_OPEN_BUTTON, ButtonFactory.createButton(ButtonType.DOOR_OPEN_BUTTON));
         doorButtons.put(ButtonType.DOOR_CLOSE_BUTTON, ButtonFactory.createButton(ButtonType.DOOR_CLOSE_BUTTON));
+        processRequest();
     }
 
     public void pressElevatorButton(FloorNumber floorNumber){
@@ -59,24 +63,32 @@ public class Elevator {
     }
 
     public void addRequest(Request request){
-        requests.offer(request);
-        System.out.println("Request added to Elevator " + elevatorNumber + ": Floor " + request.getFloorNumber());
-        if(!isMoving){
-            processRequest();
+        try{
+            requests.put(request);
+        } catch (InterruptedException e){
+            System.out.println("interrupted");
         }
     }
 
     private void processRequest(){
-        if(requests.isEmpty()){
-            currentDirection = Direction.IDLE;
-            System.out.println("All request processed");
-            return;
-        }
-        Request request = requests.poll();
-        moveElevator(request.getFloorNumber());
+
+        Thread consumerThread = new Thread(()->{
+            try{
+                while(true){
+                    Request request = requests.take();
+                    Thread.sleep(1000);
+                    System.out.println("Consuming: consuming request: " + currentFloor + " to " + request.getFloorNumber());
+                    moveElevator(request.getFloorNumber());
+                    System.out.println("Consumed: consumed request: " + request.getFloorNumber() + " " + request.getDirection());
+                }
+            } catch (InterruptedException e) {
+                System.out.println("consumer thread interrupted");
+            }
+        });
+        consumerThread.start();
     }
 
-    private void moveElevator(FloorNumber destinationFloor){
+    private void moveElevator(FloorNumber destinationFloor) {
         if(destinationFloor == currentFloor){
             System.out.println("Elevator already at destination floor");
             return;
@@ -84,32 +96,20 @@ public class Elevator {
 
         if(destinationFloor.ordinal() > currentFloor.ordinal()){
             currentDirection = Direction.UP;
-            System.out.println("Moving up from " + currentFloor + " to " + destinationFloor);
+            System.out.println(elevatorNumber + " Moving up from " + currentFloor + " to " + destinationFloor);
         } else{
             currentDirection = Direction.DOWN;
-            System.out.println("Moving down from " + currentFloor + " to " + destinationFloor);
+            System.out.println(elevatorNumber + " Moving down from " + currentFloor + " to " + destinationFloor);
+        }
+        try{
+            Thread.sleep((Math.abs(destinationFloor.ordinal() - currentFloor.ordinal())*1000));
+        } catch (InterruptedException e){
+            System.out.println("moveElevator fun interrupted");
         }
 
-        CompletableFuture.runAsync(()->{
-            try {
-                Thread.sleep((Math.abs(destinationFloor.ordinal() - currentFloor.ordinal())*1000));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }).thenAccept(r -> {
-            currentFloor = destinationFloor;
-            currentDirection = Direction.IDLE;
-            System.out.println("Elevator reached the destination Floor");
-        });
-//        try{
-//            Thread.sleep((Math.abs(destinationFloor.ordinal() - currentFloor.ordinal())*1000));
-//        } catch (InterruptedException e){
-//            Thread.currentThread().interrupt();
-//        }
-//
-//        currentFloor = destinationFloor;
-//        currentDirection = Direction.IDLE;
-//        System.out.println("Elevator reached the destination Floor");
+        currentFloor = destinationFloor;
+        currentDirection = Direction.IDLE;
+        System.out.println("Elevator reached the destination Floor " + currentFloor);
     }
 
     public ElevatorNumber getElevatorNumber() {

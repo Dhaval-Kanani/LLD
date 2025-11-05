@@ -31,15 +31,16 @@ public class ElevatorManager {
     public void requestElevator(FloorNumber floorNumber, Direction direction){
         Floor floor = floorMap.get(floorNumber);
         if(floor == null){
-            System.out.println("Floor ot exist");
+            System.out.println("Floor not exist");
             return;
         }
 
         floor.requestElevator(direction);
-        Request request = new Request(floorNumber, direction);
+
         Elevator elevator = findOptimalElevator(floorNumber);
+        Request request = new Request(floorNumber, direction);
         elevator.addRequest(request);
-        System.out.println("Requested from "  + floorNumber + " for "  +direction + " direction.");
+        System.out.println("Request from Floor: Requested from "  + floorNumber + " for "  +direction + " direction.");
     }
 
     private Elevator findOptimalElevator(FloorNumber floorNumber){
@@ -58,7 +59,7 @@ public class ElevatorManager {
     }
 
     public void requestFloor(ElevatorNumber elevatorNumber, FloorNumber destinationFloor){
-        System.out.println("Requesting elevator to move to " + destinationFloor);
+//        System.out.println("Requesting elevator to move to " + destinationFloor);
 
         Elevator elevator = elevatorMap.get(elevatorNumber);
         if(elevator == null){
@@ -66,6 +67,7 @@ public class ElevatorManager {
             return;
         }
         elevator.pressElevatorButton(destinationFloor);
+        System.out.println("Request from Elevator: Request added to Elevator " + elevatorNumber + ": Floor " + destinationFloor);
     }
 
     public void showStatus(){
