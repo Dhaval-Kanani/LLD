@@ -9,7 +9,7 @@ public class TwoThousandProcessor extends WithdrawalProcessor{
         int noOfNotes = atm.getNoOfTwoThousandNotes();
 
         int requiredNoOfNotes = amount/2000;
-        int reminder = amount%2000;
+        int remainder = amount%2000;
 
         if(requiredNoOfNotes<=noOfNotes){
             atm.setNoOfTwoThousandNotes(noOfNotes - requiredNoOfNotes);
@@ -17,12 +17,12 @@ public class TwoThousandProcessor extends WithdrawalProcessor{
         } else{
             atm.setNoOfTwoThousandNotes(0);
             atm.setTotalBalance(atm.getTotalBalance() - noOfNotes*2000);
-            reminder += (requiredNoOfNotes - noOfNotes)*2000;
+            remainder += (requiredNoOfNotes - noOfNotes)*2000;
         }
 
-        if(reminder!=0){
+        if(remainder!=0){
 
-            withdrawAmount(atm, reminder);
+            withdrawAmount(atm, remainder);
         }
     }
 }

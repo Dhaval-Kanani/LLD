@@ -18,6 +18,14 @@ public class MovieController {
         return cityMovieMap.getOrDefault(city, new ArrayList<>());
     }
 
+    public void setCityMovieMap(Map<City, List<Movie>> cityMovieMap) {
+        this.cityMovieMap = cityMovieMap;
+    }
+
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList.addAll(movieList);
+    }
+
     public void addMovieInCityMovieMap(City city, Movie movie) {
         List<Movie> movieList = cityMovieMap.getOrDefault(city, new ArrayList<>());
         movieList.add(movie);

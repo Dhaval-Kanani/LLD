@@ -1,9 +1,10 @@
 package org.modules.SystemDesign.BookMyShow;
 
-import javax.swing.table.JTableHeader;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BookMyShow {
@@ -72,17 +73,14 @@ public class BookMyShow {
         Movie movie1 = new Movie("Avengers", 130);
         Movie movie2 = new Movie("Bahubali", 150);
         Movie movie3 = new Movie("KGF", 160);
-        movieController.addMovieInCityMovieMap(City.DELHI, movie1);
-        movieController.addMovieInCityMovieMap(City.DELHI, movie2);
-        movieController.addMovieInCityMovieMap(City.DELHI, movie3);
-
-        movieController.addMovieInCityMovieMap(City.BANGLORE, movie1);
-        movieController.addMovieInCityMovieMap(City.BANGLORE, movie2);
-        movieController.addMovieInCityMovieMap(City.BANGLORE, movie3);
-
-        movieController.addMovieInMovieList(movie1);
-        movieController.addMovieInMovieList(movie2);
-        movieController.addMovieInMovieList(movie3);
+        List<Movie> movies = List.of(movie1, movie2, movie3);
+        Map<City, List<Movie>> delhiMovies = new HashMap<>();
+        delhiMovies.put(City.DELHI, movies);
+        Map<City, List<Movie>> blrMovies = new HashMap<>();
+        blrMovies.put(City.BANGLORE, movies);
+        movieController.setCityMovieMap(delhiMovies);
+        movieController.setCityMovieMap(blrMovies);
+        movieController.setMovieList(movies);
     }
 
     private void initializeTheaters() {
@@ -92,6 +90,7 @@ public class BookMyShow {
         Screen screen1 = new Screen("S01");
         Screen screen2 = new Screen("S02");
         Screen screen3 = new Screen("S03");
+        List<Screen> screens = List.of(screen1, screen2, screen3);
 
         Movie movie1 = movieController.getMovieByName("Avengers");
         Movie movie2 = movieController.getMovieByName("Bahubali");
@@ -100,11 +99,12 @@ public class BookMyShow {
         Show show1 = new Show("S01", screen1, movie1, LocalDateTime.now());
         Show show2 = new Show("S02", screen2, movie2, LocalDateTime.now().plusHours(1));
         Show show3 = new Show("S03", screen3, movie3, LocalDateTime.now().plusHours(2));
+        List<Show> shows = List.of(show1, show2, show3);
 
-        theaterController.setCityTheaterMap(City.DELHI, new Theater("T01", List.of(screen1, screen2), List.of(show1, show2, show3)));
+        theaterController.setCityTheaterMap(City.DELHI, new Theater("T01", screens, shows));
 
-        theaterController.setCityTheaterMap(City.BANGLORE, new Theater("T02", List.of(screen1, screen2), List.of(show1, show2, show3)));
-        theaterController.setCityTheaterMap(City.BANGLORE, new Theater("T03", List.of(screen1, screen2), List.of(show1, show2, show3)));
+        theaterController.setCityTheaterMap(City.BANGLORE, new Theater("T02", screens, shows));
+        theaterController.setCityTheaterMap(City.BANGLORE, new Theater("T03", screens, shows));
     }
 
     private List<Seat> createSeats(){
