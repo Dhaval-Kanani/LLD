@@ -32,13 +32,15 @@ public class PubSubDemo {
         Message m4 = new Message("Ronaldo Retired!!");
 
 
+
         pubSubService.publishMessage(m1, "TECH");
         pubSubService.publishMessage(m2, "SPORTS");
         pubSubService.publishMessage(m3, "SPORTS");
+        pubSubService.setOffSetForSubscriber(sportFan1, 1, "SPORTS");
         pubSubService.publishMessage(m4, "SPORTS");
 
 
-        pubSubService.setOffSetForSubscriber(sportFan1, 1, "SPORTS");
+
 
         Thread.sleep(1000);
 

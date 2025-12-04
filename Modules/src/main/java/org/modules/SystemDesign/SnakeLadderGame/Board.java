@@ -44,7 +44,7 @@ public class Board {
     }
 
     public Cell getCell(int number){
-        int row = number/cells.length;
+        int row = number/cells[0].length;
         int col = number%cells[0].length;
         return cells[row][col];
     }

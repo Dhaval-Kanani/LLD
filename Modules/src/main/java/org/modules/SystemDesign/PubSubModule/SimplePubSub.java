@@ -4,23 +4,20 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class SimplePubSub {
-    private Boolean isAvailable;
     private Queue<Integer> queue;
 
     public SimplePubSub() {
-        this.isAvailable = false;
         this.queue = new LinkedList<>();
     }
 
     public synchronized void publisher(int n){
         System.out.println("Published: " + n);
         queue.offer(n);
-        isAvailable = true;
-        notify();
+        notifyAll();
     }
 
     public synchronized void consumer(){
-        while(!isAvailable){
+        while(queue.isEmpty()){
             try{
                 System.out.println("Waiting...");
                 wait();
@@ -30,7 +27,6 @@ public class SimplePubSub {
         }
         System.out.println("Consuming...");
         int n = queue.poll();
-        isAvailable = false;
         System.out.println(n);
         System.out.println("Consumed...");
     }

@@ -31,12 +31,12 @@ public class Main {
             int finalI = i;
             Thread thread = new Thread(() ->{
                 try{
-                    Vehicle vehicle = new Vehicle("CAR" + String.valueOf(finalI), VehicleType.CAR, "ABC");
+                    Vehicle vehicle = new Vehicle("CAR" + finalI, VehicleType.CAR, "ABC");
                     Thread.sleep((long)(Math.random()*100));
                     Ticket ticket = manager.parkVehicle(vehicle);
                     successfulTickets.add(ticket);
                 } catch (Exception e) {
-                    failedAttempts.add("CAR" + String.valueOf(finalI) + ": " + e.getMessage());
+                    failedAttempts.add("CAR" + finalI + ": " + e.getMessage());
                 }
             });
             parkingThreads.add(thread);
@@ -57,12 +57,13 @@ public class Main {
         System.out.println("\n STRESS TEST RESULTS:");
 //        System.out.println("Time taken: " + (endTime - startTime) + "ms");
         System.out.println("Successful parkings: " + successfulTickets.size());
-        System.out.println("Failed attempts: " + failedAttempts.size());
 
+        System.out.println("\n Successful attempts:");
         for (Ticket ticket : successfulTickets) {
             System.out.println("  " + ticket.getVehicleId());
         }
 
+        System.out.println("Failed attempts: " + failedAttempts.size());
         System.out.println("\n Failed attempts:");
         for (String failure : failedAttempts) {
             System.out.println("  " + failure);

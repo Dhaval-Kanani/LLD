@@ -88,10 +88,6 @@ public class ParkingLotManager {
                 throw new ParkingLotException("Vehicle not found with ticket id: " + tickedId);
             }
 
-            if(!parkedVehicles.containsKey(vehicle.getVehicleId())) {
-                throw new ParkingLotException("Vehicle is not parked with id: " + vehicle.getVehicleId());
-            }
-
             double totalHrs = ticket.calculateHours();
             double totalFare = FeeCalculator.calculateFee(totalHrs, vehicle.getVehicleType());
 
@@ -103,7 +99,6 @@ public class ParkingLotManager {
             }
 
             ParkingSpot parkingSpot = vehicle.getAssignedSpot();
-
 
             parkingSpot.unParkVehicle();
             vehicle.unParkVehicle();

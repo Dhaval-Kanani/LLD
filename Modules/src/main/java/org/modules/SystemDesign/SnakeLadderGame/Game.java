@@ -16,7 +16,7 @@ public class Game {
     }
 
     private void initializeGame() {
-        this.board = new Board(10, 10, 5, 6);
+        this.board = new Board(10, 20, 5, 6);
         this.dices = new Dices(1, 1, 6);
         this.players = new LinkedList<>();
 
