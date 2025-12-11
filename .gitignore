@@ -1,0 +1,33 @@
+# Repository-level .gitignore for a Java / Maven project
+# Ignore Maven build output
+target/
+
+# IDE / editor
+*.iml
+.idea/
+.vscode/
+/.classpath
+/.project
+.settings/
+
+# Java
+*.class
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+
+# Node / other
+node_modules/
+
+# Generated folders
+/out/
+
+# Allow local config if needed (uncomment to ignore local config files)
+# local.properties
