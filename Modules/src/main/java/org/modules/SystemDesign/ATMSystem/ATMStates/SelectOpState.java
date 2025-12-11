@@ -16,7 +16,6 @@ public class SelectOpState extends ATMState{
             case CASH_WITHDRAWAL -> atm.setAtmState(new WithdrawalState());
             default -> {
                 System.out.println("Invalid operation selected");
-                atm.setAtmState(new IdleState());
                 exitATM(atm);
             }
         }

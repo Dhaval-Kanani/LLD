@@ -70,6 +70,13 @@ public class ElevatorManager {
         System.out.println("Request from Elevator: Request added to Elevator " + elevatorNumber + ": Floor " + destinationFloor);
     }
 
+    public void suspendAllElevators(){
+        for(ElevatorNumber elevatorNumber : elevatorMap.keySet()){
+            Elevator elevator = elevatorMap.get(elevatorNumber);
+            elevator.suspend();
+        }
+    }
+
     public void showStatus(){
         System.out.println("Elevator status -------------");
 

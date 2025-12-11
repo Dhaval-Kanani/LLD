@@ -16,6 +16,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Elevator {
     private ElevatorNumber elevatorNumber;
@@ -26,11 +27,13 @@ public class Elevator {
     private Direction currentDirection;
 
     private BlockingQueue<Request> requests;
+    private AtomicBoolean running;
 
     public Elevator(ElevatorNumber elevatorNumber, FloorNumber currentFloor) {
         this.elevatorNumber = elevatorNumber;
         this.currentFloor = currentFloor;
         this.currentDirection = Direction.IDLE;
+        this.running = new AtomicBoolean(true);
         initialize();
     }
 
@@ -72,20 +75,39 @@ public class Elevator {
 
     private void processRequest(){
 
-        Thread consumerThread = new Thread(()->{
-            try{
-                while(true){
+        CompletableFuture.runAsync(() ->{
+            while(running.get()){
+                try {
                     Request request = requests.take();
-                    Thread.sleep(1000);
                     System.out.println("Consuming: consuming request: " + currentFloor + " to " + request.getFloorNumber());
                     moveElevator(request.getFloorNumber());
                     System.out.println("Consumed: consumed request: " + request.getFloorNumber() + " " + request.getDirection());
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
                 }
-            } catch (InterruptedException e) {
-                System.out.println("consumer thread interrupted");
             }
+            System.out.println("Elevator: " + elevatorNumber + " stopped");
         });
-        consumerThread.start();
+
+//        Thread consumerThread = new Thread(()->{
+//            try{
+//                while(true){
+//                    Request request = requests.take();
+//                    Thread.sleep(1000);
+//                    System.out.println("Consuming: consuming request: " + currentFloor + " to " + request.getFloorNumber());
+//                    moveElevator(request.getFloorNumber());
+//                    System.out.println("Consumed: consumed request: " + request.getFloorNumber() + " " + request.getDirection());
+//                }
+//            } catch (InterruptedException e) {
+//                System.out.println("consumer thread interrupted");
+//            }
+//        });
+//        consumerThread.start();
+    }
+
+    public void suspend(){
+        this.running.set(false);
     }
 
     private void moveElevator(FloorNumber destinationFloor) {
@@ -101,15 +123,17 @@ public class Elevator {
             currentDirection = Direction.DOWN;
             System.out.println(elevatorNumber + " Moving down from " + currentFloor + " to " + destinationFloor);
         }
-        try{
-            Thread.sleep((Math.abs(destinationFloor.ordinal() - currentFloor.ordinal())*1000));
-        } catch (InterruptedException e){
-            System.out.println("moveElevator fun interrupted");
-        }
-
-        currentFloor = destinationFloor;
-        currentDirection = Direction.IDLE;
-        System.out.println("Elevator reached the destination Floor " + currentFloor);
+        CompletableFuture.runAsync(() -> {
+            try{
+                Thread.sleep((Math.abs(destinationFloor.ordinal() - currentFloor.ordinal())*1000));
+            } catch (InterruptedException e){
+                System.out.println("moveElevator fun interrupted");
+            }
+        }).thenAccept(r -> {
+            currentFloor = destinationFloor;
+            currentDirection = Direction.IDLE;
+            System.out.println("Elevator reached the destination Floor " + currentFloor);
+        });
     }
 
     public ElevatorNumber getElevatorNumber() {

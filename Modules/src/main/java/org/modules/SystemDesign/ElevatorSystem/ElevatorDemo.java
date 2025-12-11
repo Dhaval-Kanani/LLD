@@ -40,6 +40,7 @@ public class ElevatorDemo {
 
         elevatorManager.showStatus();
 
+
         elevatorManager.requestElevator(FloorNumber.FLOOR5, Direction.UP);
         elevatorManager.requestElevator(FloorNumber.FLOOR3, Direction.DOWN);
 
@@ -50,6 +51,8 @@ public class ElevatorDemo {
         elevatorManager.showStatus();
 
         System.out.println("Demo completed!!");
+//        elevatorManager.suspendAllElevators();
+
     }
 
 }
