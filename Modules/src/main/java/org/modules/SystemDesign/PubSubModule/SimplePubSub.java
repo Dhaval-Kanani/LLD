@@ -30,4 +30,23 @@ public class SimplePubSub {
         System.out.println(n);
         System.out.println("Consumed...");
     }
+
+    public static void main(String[] args) {
+
+        SimplePubSub simplePubSub = new SimplePubSub();
+        Thread producerThread = new Thread(()->{
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            simplePubSub.publisher(10);
+        });
+        Thread consumerThread = new Thread(()->{
+            simplePubSub.consumer();
+        });
+
+        producerThread.start();
+        consumerThread.start();
+    }
 }

@@ -84,4 +84,10 @@ public class PubSubModelUsingBlockingQueue {
         }
         return "Fib of " + n + " is: " + s;
     }
+
+    public static void main(String[] args) {
+
+        PubSubModelUsingBlockingQueue queue = new PubSubModelUsingBlockingQueue(10);
+        queue.demo();
+    }
 }

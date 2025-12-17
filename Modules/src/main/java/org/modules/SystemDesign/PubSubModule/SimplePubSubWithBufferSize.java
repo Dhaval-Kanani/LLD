@@ -35,8 +35,9 @@ public class SimplePubSubWithBufferSize {
                 }
 
                 queue.offer(n);
-                lock.notify();
+                lock.notifyAll();
             }
+            System.out.println("Produce: " + (n));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -46,19 +47,45 @@ public class SimplePubSubWithBufferSize {
     public void consumer(){
         try{
             while(true){
+                int n;
                 synchronized (lock){
                     while(queue.isEmpty()) {
                         System.out.println("Queue is empty...");
                         lock.wait();
                     }
-                    int n = queue.poll();
-                    System.out.println(n);
-                    System.out.println("Consumed...");
-                    lock.notify();
+                    n = queue.poll();
+
+                    lock.notifyAll();
                 }
+                System.out.println("Consume: " + n);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ignored) {}
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+
+        SimplePubSubWithBufferSize queue = new SimplePubSubWithBufferSize(3);
+
+        Thread producerThread = new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ignored) {}
+            for (int i = 0; i < 15; i++) {
+                queue.producer(i);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException ignored) {}
+            }
+        });
+
+        Thread consumerThread = new Thread(queue::consumer);
+
+        producerThread.start();
+        consumerThread.start();
     }
 }
