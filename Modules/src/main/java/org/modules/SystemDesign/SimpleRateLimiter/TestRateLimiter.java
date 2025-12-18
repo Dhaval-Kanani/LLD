@@ -2,7 +2,7 @@ package org.modules.SystemDesign.SimpleRateLimiter;
 
 public class TestRateLimiter {
     public static void main(String[] args) throws InterruptedException {
-        RateLimiter rateLimiter = new RateLimiter(3, 5000);
+        TokenBucketRateLimiter rateLimiter = new TokenBucketRateLimiter(3, 3000);
 
         for(int i=1; i<=5; i++){
             boolean allowed = rateLimiter.allow("user");
@@ -17,3 +17,5 @@ public class TestRateLimiter {
         System.out.println("Request: " + 6 + (allowed ? " allowed" : " not allowed"));
     }
 }
+
+
